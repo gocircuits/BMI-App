@@ -1,4 +1,5 @@
 <script>
+	import {Row,Col} from 'svelte-chota';
 	import Speedometer from "svelte-speedometer";
 
 	let impUnits = true;
@@ -59,27 +60,99 @@
 		}
 	}
 </script>
+<Row>
+	<Col> <h1 class="is-center">Body Mass Calculator</h1> </Col>
+</Row>
+<Row>
+	<Col size="2"> <h2>Units</h2> </Col>
+	<Col size="2"> <button on:click={toggle}> {impUnits ? 'Imperial' : 'Metric'} </button> </Col>
+	<Col></Col>
+</Row>
+<Row>
+	<Col size="2"> <h2>Values</h2> </Col>
+	<Col size="2"> Height </Col>
+	{#if impUnits}
+	<Col size="2">	
+	<input
+		class="imp"
+		value={hf}
+		on:input={(e) => setFromHf(e.target.value)}
+		type="number" />
+	</Col>
+	<Col size="1">	
+		ft
+	</Col>
+	<Col size="2">	
+		<input
+		class="imp"
+		value={hi}
+		on:input={(e) => setFromHi(e.target.value)}
+		type="number" />
+	</Col>
+	<Col size="1">	
+	in
+</Col>
+{:else}
+<Col size="2">	
+		<input
+		value={hm}
+		on:input={(e) => setFromHm(e.target.value)}
+		type="number" />
+	</Col>
+	<Col size="1">	
+	cm
+</Col>
+{/if}
+
+</Row>
+
+<Row>
+<Col size="2"> </Col>
+<Col size="2"> Weight</Col>
+<Col size="2"> 
+
+{#if impUnits}
+	<input value={w} on:input={(e) => setFromW(e.target.value)} type="number" />
+{:else}
+	<input
+		value={wm}
+		step="0.1"
+		on:input={(e) => setFromWm(e.target.value)}
+		type="number" />
+	
+{/if}
+</Col>
+<Col size="1">	
+	{impUnits ? 'lbs' : 'kg'}
+</Col>
+</Row>
+<Row>
+<Col size="2"> </Col>
+<Col size="2"> BMI</Col>
+<Col size="2"> 
+<input
+	class:glow={bmi > 30}
+	class:blue={bmi < 19}
+	step="0.1"
+	value={bmi}
+	on:input={(e) => setFromB(e.target.value)}
+	type="number" />
+</Col>
+</Row>
+<span class:range={bmi > 30 || bmi < 19}>
+	<Speedometer
+		maxValue={30}
+		minValue={19}
+		value={bmi}
+		needleColor="violet"
+		needleHeightRatio={0.7}
+		endColor="firebrick"
+		startColor="lightgreen"
+		segments={12} />
+</span>
+
 
 <style>
-	button {
-		width: 5em;
-		display: inline-block;
-	}
-	input {
-		width: 5em;
-		display: inline-block;
-	}
-	input.imp {
-		width: 4em;
-		display: inline-block;
-	}
-	.range {
-		display: none;
-	}
-	.blue {
-		font-size: 20px;
-		color: #00f;
-	}
 	.glow {
 		font-size: 20px;
 		color: #f00;
@@ -101,65 +174,3 @@
 		}
 	}
 </style>
-<h1>Bady Mass Calculator</h1>
-<h2>Units</h2>
-<button on:click={toggle}> {impUnits ? 'Imperial' : 'Metric'} </button>
-<h2>Values</h2>
-{#if impUnits}
-	height
-	<input
-		class="imp"
-		value={hf}
-		on:input={(e) => setFromHf(e.target.value)}
-		type="number" />
-	ft
-	<input
-		class="imp"
-		value={hi}
-		on:input={(e) => setFromHi(e.target.value)}
-		type="number" />
-	in
-{:else}
-	height
-	<input
-		value={hm}
-		on:input={(e) => setFromHm(e.target.value)}
-		type="number" />
-	cm
-{/if}
-<br />
-{#if impUnits}
-	weight
-	<input value={w} on:input={(e) => setFromW(e.target.value)} type="number" />
-	{impUnits ? 'lbs' : 'kg'}
-{:else}
-	weight
-	<input
-		value={wm}
-		step="0.1"
-		on:input={(e) => setFromWm(e.target.value)}
-		type="number" />
-	{impUnits ? 'lbs' : 'kg'}
-{/if}
-
-<br />
-bmi
-<input
-	class:glow={bmi > 30}
-	class:blue={bmi < 19}
-	step="0.1"
-	value={bmi}
-	on:input={(e) => setFromB(e.target.value)}
-	type="number" />
-<br />
-<span class:range={bmi > 30 || bmi < 19}>
-	<Speedometer
-		maxValue={30}
-		minValue={19}
-		value={bmi}
-		needleColor="violet"
-		needleHeightRatio={0.7}
-		endColor="firebrick"
-		startColor="lightgreen"
-		segments={12} />
-</span>
